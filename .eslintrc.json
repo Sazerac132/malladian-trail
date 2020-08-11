@@ -1,0 +1,58 @@
+{
+    "env": {
+        "browser": true,
+        "es6": true,
+        "node": true
+    },
+    "extends": [
+        "plugin:react/recommended",
+        "airbnb"
+    ],
+    "globals": {
+        "Atomics": "readonly",
+        "SharedArrayBuffer": "readonly"
+    },
+    "parserOptions": {
+        "ecmaFeatures": {
+            "jsx": true
+        },
+        "ecmaVersion": 2018,
+        "sourceType": "module"
+    },
+    "plugins": [
+        "react"
+    ],
+    "rules": {
+        "arrow-body-style": 0,
+        "class-methods-use-this": 0,
+        "comma-dangle": [2, "never"],
+        "func-names": 0,
+        "implicit-arrow-linebreak": 0,
+        "import/prefer-default-export": 0,
+        "indent": [2, 2, {
+            "SwitchCase": 1
+        }],
+        "jsx-a11y/no-static-element-interactions": 0,
+        "jsx-quotes": [1, "prefer-single"],
+        "max-len": [1, {
+            "code": 140
+        }],
+        "no-bitwise": 0,
+        "no-plusplus": 0,
+        "no-underscore-dangle": 0,
+        "no-use-before-define": [2, {
+            "functions": false
+        }],
+        "object-curly-newline": [2, {
+            "consistent": true
+        }],
+        "react/jsx-filename-extension": 0,
+        "react/jsx-indent": [1, 2],
+        "react/jsx-indent-props": [1, 2],
+        "react/jsx-props-no-spreading": 0,
+        "react/no-array-index-key": 0,
+        "react/prefer-stateless-function": 0,
+        "react/require-default-props": 0,
+        "react/sort-comp": 0
+    }
+  }

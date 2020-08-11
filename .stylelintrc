@@ -1,0 +1,17 @@
+{
+    "extends": "stylelint-config-standard",
+    "rules": {
+        "at-rule-empty-line-before": ["always", {
+            "except": ["first-nested"]
+        }],
+        "indentation": 2,
+        "no-empty-source": null,
+        "number-no-trailing-zeros": null
+    },
+    "ignoreFiles": [
+        "**/*.js",
+        "**/*.jsx",
+        "**/*.png",
+        "**/*.jpg"
+    ]
+}
