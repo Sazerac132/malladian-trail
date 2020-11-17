@@ -1,0 +1,7 @@
+CREATE DATABASE IF NOT EXISTS malladrus;
+
+CREATE TABLE tversion (
+  version VARCHAR(16) NOT NULL
+);
+
+INSERT INTO tversion VALUES ('0.0.1');
