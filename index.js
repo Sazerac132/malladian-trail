@@ -15,7 +15,7 @@ if (!isProduction) {
   require('dotenv').config();
 }
 
-const database = require('./server/boilerplate/database');
+const database = require('./server/database');
 const Logger = require('./server/boilerplate/logger');
 
 app.use(cookieParser());
