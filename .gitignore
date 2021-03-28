@@ -6,3 +6,7 @@ node_modules
 
 # Dev Secrets
 .env
+
+# Build Files
+dev/
+build/
