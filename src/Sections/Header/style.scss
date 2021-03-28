@@ -1,0 +1,18 @@
+.ribbonBar {
+  display: flex;
+
+  &__link {
+    flex: 1;
+    text-align: center;
+    position: relative;
+  }
+
+  &__nestLink {
+    display: none;
+    position: absolute;
+  }
+
+  &__link:hover &__nestLink {
+    display: block;
+  }
+}
