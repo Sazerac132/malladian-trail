@@ -1,18 +1,35 @@
 const throttle = require('express-throttle');
 
 const db = require('../database');
+const Logger = require('../Helpers/logger');
 
 const setUpEndpoints = (router) => {
   router.post('/create', throttle({
-    burst: 1,
+    burst: 1000,
     period: '5min'
   }), async (req, res) => {
-    const sql = 'SELECT create_game() AS \'code\'';
+    const {
+      name,
+      passCode = null
+    } = req.body;
 
-    const { results } = await db.query(sql);
+    const sql = `SELECT create_game(
+      :name,
+      :passCode
+    ) AS 'code'`;
+
+    const params = {
+      name,
+      passCode
+    };
+
+    const { results } = await db.query(sql, params);
     const { code } = results[0];
 
-    req.session.gameId = code;
+    req.session.game = {
+      gameId: parseInt(code, 10),
+      isGm: true
+    };
 
     res.status(201).json({ code });
   });
@@ -21,21 +38,47 @@ const setUpEndpoints = (router) => {
     burst: 3,
     period: '1min'
   }), async (req, res) => {
-    const { code } = req.body;
-    const sql = 'SELECT game_code FROM tgame WHERE game_code = :code';
-    const params = { code };
+    const { code, codeword = null } = req.body;
+    const sql = 'SELECT game_code, game_name FROM tgame '
+      + 'WHERE game_code = :code '
+      + 'AND (codeword = :codeword OR codeword IS NULL)';
 
-    const { results } = await db.query(sql, params);
+    const params = { code, codeword };
 
-    if (results.length) {
-      req.session.gameId = code;
-      res.status(200).json({ message: `Joined game: ${code}` });
-    } else {
+    try {
+      const { results } = await db.query(sql, params);
+
+      if (results.length) {
+        req.session.game = {
+          id: parseInt(code, 10),
+          name: results[0].game_name,
+          isGm: false
+        };
+
+        res.status(200)
+          .json({
+            code,
+            message: `Joined game: ${code}`
+          });
+        return;
+      }
+
       res.status(404)
         .json({
           message: `Could not find game with code: ${code}`
         });
+    } catch (err) {
+      Logger.error(err);
+      res.status(400).json({
+        message: 'Error!'
+      });
     }
+  });
+
+  router.get('/current', (req, res) => {
+    res.send({
+      ...(req.session.game || {})
+    });
   });
 };
 
