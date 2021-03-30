@@ -1,6 +1,10 @@
 .wrapper {
   margin: 0 auto;
   width: 90%;
-  max-width: 800px;
-  padding-top: 10px;
+  max-width: 1200px;
+}
+
+.bodyWrapper {
+  min-height: calc(85vh - 50px);
+  overflow: hidden;
 }

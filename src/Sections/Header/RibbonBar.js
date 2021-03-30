@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { NavLink } from 'react-router-dom';
+import { NavLink, Link } from 'react-router-dom';
 
 import './style.scss';
 
@@ -11,13 +11,13 @@ const RibbonBar = () => {
         <NavLink to='/'>Home</NavLink>
       </div>
       <div className='ribbonBar__link'>
-        Play
+        <NavLink to='/game/play'>Play</NavLink>
         <div className='ribbonBar__nestLink'>
           <div className='ribbonBar__nestLink__link'>
-            <NavLink to='/create'>New Game</NavLink>
+            <Link to='/game/create'>New Game</Link>
           </div>
           <div className='ribbonBar__nestLink__link'>
-            <NavLink to='/join'>Join Game</NavLink>
+            <Link to='/game/join'>Join Game</Link>
           </div>
         </div>
       </div>

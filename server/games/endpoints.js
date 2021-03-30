@@ -10,29 +10,38 @@ const setUpEndpoints = (router) => {
   }), async (req, res) => {
     const {
       name,
-      passCode = null
+      codeword = null
     } = req.body;
 
     const sql = `SELECT create_game(
       :name,
-      :passCode
+      :codeword
     ) AS 'code'`;
 
     const params = {
       name,
-      passCode
+      codeword
     };
 
-    const { results } = await db.query(sql, params);
-    const { code } = results[0];
+    console.log(req.body);
 
-    req.session.game = {
-      id: parseInt(code, 10),
-      name,
-      isGm: true
-    };
+    try {
+      const { results } = await db.query(sql, params);
+      const { code } = results[0];
 
-    res.status(201).json({ code });
+      req.session.game = {
+        id: parseInt(code, 10),
+        name,
+        isGm: true
+      };
+
+      res.status(201).json({ code });
+    } catch (err) {
+      Logger.error(err);
+      res.status(500).json({
+        message: 'Error!'
+      });
+    }
   });
 
   router.post('/join', throttle({
@@ -70,7 +79,7 @@ const setUpEndpoints = (router) => {
         });
     } catch (err) {
       Logger.error(err);
-      res.status(400).json({
+      res.status(500).json({
         message: 'Error!'
       });
     }
@@ -79,6 +88,14 @@ const setUpEndpoints = (router) => {
   router.get('/current', (req, res) => {
     res.send({
       ...(req.session.game || {})
+    });
+  });
+
+  router.post('/leave', (req, res) => {
+    req.session.game = null;
+
+    res.send({
+      message: 'Successfully left game.'
     });
   });
 };

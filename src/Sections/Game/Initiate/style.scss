@@ -1,0 +1,27 @@
+@import '../../../variables';
+
+.already {
+  strong {
+    font-family: 'Trebuchet MS', sans-serif;
+  }
+}
+
+.initiateGame {
+  &__note {
+    font-size: 1.2rem;
+    margin: 10px;
+
+    &--small {
+      font-size: 1rem;
+    }
+  }
+
+  &__success {
+    float: right;
+  }
+
+  &__error {
+    color: rgba(90, 40, 0, 0.8);
+    float: right;
+  }
+}
