@@ -1,6 +1,7 @@
 const path = require('path');
 
 const express = require('express');
+const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const MySQLStore = require('express-mysql-session')(session);
@@ -16,9 +17,10 @@ if (!isProduction) {
 }
 
 const database = require('./server/database');
-const Logger = require('./server/boilerplate/logger');
+const Logger = require('./server/Helpers/logger');
 
 app.use(cookieParser());
+app.use(bodyParser.json());
 
 const sessionSettings = {
   secret: process.env.SECRET || 'secret',
@@ -34,7 +36,7 @@ app.use(session(sessionSettings));
 
 const router = require('./server/router.js');
 
-app.use(router);
+app.use('/api', router);
 
 const frontEndPath = path.resolve(__dirname, `./${isProduction ? 'build' : 'dev'}`);
 app.use(express.static(frontEndPath));
