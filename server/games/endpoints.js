@@ -27,7 +27,8 @@ const setUpEndpoints = (router) => {
     const { code } = results[0];
 
     req.session.game = {
-      gameId: parseInt(code, 10),
+      id: parseInt(code, 10),
+      name,
       isGm: true
     };
 
