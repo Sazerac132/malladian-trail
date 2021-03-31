@@ -12,9 +12,9 @@ import './style.scss';
 
 const Play = () => {
   const { section } = useContext(PlayContext);
-  const { gameId } = useContext(GameContext);
+  const { loading, gameId } = useContext(GameContext);
 
-  if (!gameId) {
+  if (!loading && !gameId) {
     return <Redirect to='/game/join' />;
   }
 

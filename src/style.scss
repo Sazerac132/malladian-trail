@@ -17,7 +17,15 @@ body {
   min-height: 100%;
   font-size: 16pt;
   font-family: Goudy;
-  color: rgba(20, 14, 8, 0.85);
+  color: rgba($font-colour, 0.85);
+}
+
+a {
+  color: rgba($link-colour, 0.6);
+
+  &:hover {
+    color: rgba(lighten($link-colour, 20%), 0.6);
+  }
 }
 
 button {

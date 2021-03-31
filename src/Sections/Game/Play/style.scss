@@ -1,0 +1,16 @@
+.play {
+  background: rgba(0, 0, 0, 0.2);
+  padding: 8px;
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+  box-shadow: inset 0 0 35px black;
+  min-height: calc(85vh - 75px);
+
+  &__content {
+
+  }
+
+  &__nav {
+
+  }
+}

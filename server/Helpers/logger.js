@@ -9,6 +9,10 @@ class Logger {
     const isoDate = new Date().toISOString();
     console.log.apply(null, [`[${isoDate}]`, ...args]);
   }
+
+  static error(...args) {
+    Logger.log(...args);
+  }
 }
 
 module.exports = Logger;

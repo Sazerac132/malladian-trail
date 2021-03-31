@@ -78,6 +78,45 @@ class Fetcher {
         ? res.json()
         : Promise.reject(res.status)));
   }
+
+  /**
+   * Requests the current party information from the server.
+   * @returns {Promise<Object>}
+   */
+  static getParty() {
+    const endpoint = '/api/party';
+    const options = {
+      method: 'GET'
+    };
+
+    return fetch(endpoint, options)
+      .then((res) => ((res.ok)
+        ? res.json()
+        : Promise.reject(res.status)));
+  }
+
+  /**
+   * Posts a new character to the API.
+   * @param {Character} payload The new character to save.
+   */
+  static saveChar(payload) {
+    const endpoint = '/api/characters/create';
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(payload)
+    };
+
+    return fetch(endpoint, options)
+      .then((res) => ((res.ok)
+        ? res.json()
+        : Promise.reject(new Error({
+          status: res.status,
+          ...res.json()
+        }))));
+  }
 }
 
 export default Fetcher;

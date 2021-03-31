@@ -23,8 +23,6 @@ const setUpEndpoints = (router) => {
       codeword
     };
 
-    console.log(req.body);
-
     try {
       const { results } = await db.query(sql, params);
       const { code } = results[0];
@@ -87,7 +85,8 @@ const setUpEndpoints = (router) => {
 
   router.get('/current', (req, res) => {
     res.send({
-      ...(req.session.game || {})
+      game: (req.session.game || {}),
+      character: (req.session.character || {})
     });
   });
 
