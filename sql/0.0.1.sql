@@ -19,8 +19,11 @@ CREATE TABLE tcharacter (
   game_id INT NOT NULL,
   char_name VARCHAR(20) NOT NULL,
   char_desc VARCHAR(1000) NOT NULL,
+  traits VARCHAR(200),
+  other VARCHAR(200),
   pet INT NOT NULL,
   pet_name VARCHAR(20),
+  active BOOLEAN,
   PRIMARY KEY (id)
 );
 
@@ -32,6 +35,8 @@ CREATE OR REPLACE VIEW vo_party AS (
     ch.id AS 'char_id',
     ch.char_name,
     ch.char_desc,
+    ch.traits,
+    ch.other,
     ch.pet,
     ch.pet_name
   FROM tgame ga

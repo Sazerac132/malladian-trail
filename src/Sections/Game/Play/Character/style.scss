@@ -1,0 +1,33 @@
+.howMany {
+  &__switch {
+    button {
+      width: 70px;
+      padding: 4px;
+      margin: 8px;
+    }
+  }
+}
+
+.createChar {
+  width: 90%;
+  margin: 0 auto;
+
+  button {
+    
+  }
+}
+
+.myCharacter {
+  overflow: hidden;
+
+  img {
+    float: left;
+    margin: 8px;
+  }
+
+  &--inverted {
+    img {
+      float: right;
+    }
+  }
+}
