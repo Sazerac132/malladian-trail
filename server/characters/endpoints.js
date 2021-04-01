@@ -1,64 +1,76 @@
-const db = require('../database');
-
 const Logger = require('../Helpers/logger');
-const Validate = require('../Helpers/validator');
 
 const isInGame = require('../currentUserSession/isInGame');
+
+const newCharacter = require('./newCharacter');
+const updateCharacter = require('./updateCharacter');
 
 const setUpEndpoints = (router) => {
   const PATH = 'characters';
 
-  router.post(`/${PATH}/create`, isInGame, async (req, res) => {
-    const gameCode = req.session.game.id;
-
-    const {
-      name = '',
-      desc = '',
-      pet = -1,
-      petName = ''
-    } = req.body;
-
-    const invalid = [];
-
-    if (!Validate.name(name)) invalid.push('name');
-    if (!Validate.pet(pet)) invalid.push('pet');
-    if (!Validate.name(petName)) invalid.push('petName');
-
-    if (invalid.length) {
-      res.status(400).json({
-        message: 'Some of the provided fields were invalid.',
-        invalid
-      });
-      return;
-    }
-
-    const subQuery = '(SELECT id FROM tgame WHERE game_code = :gameCode)';
-    const sql = 'INSERT INTO tcharacter (game_id, char_name, char_desc, pet, pet_name)'
-      + `VALUES (${subQuery}, :name, :desc, :pet, :petName)`;
-
-    const params = {
-      gameCode,
-      name: name.slice(0, 20),
-      desc: desc.slice(0, 1000),
-      pet,
-      petName: petName.slice(0, 20)
-    };
-
+  router.post(`/${PATH}`, isInGame, async (req, res) => {
     try {
-      const { results } = await db.query(sql, params);
+      const {
+        status,
+        index,
+        character,
+        ...error
+      } = await newCharacter(req.session, req.body);
 
-      req.session.character = {
-        id: results.insertId,
-        ...params
-      };
+      if (status >= 400) {
+        res.status(status)
+          .json(error);
+        return;
+      }
 
-      res.status(200)
+      if (!Array.isArray(req.session.character)) {
+        req.session.character = [];
+      }
+
+      req.session.character[index] = character;
+
+      res.status(status)
         .json({
-          message: 'Character created!'
+          message: 'Character created!',
+          id: character.id
         });
     } catch (err) {
       Logger.error(err);
-      res.status(400).json({
+      res.status(500).json({
+        message: 'Error!'
+      });
+    }
+  });
+
+  router.put(`/${PATH}/:id`, isInGame, async (req, res) => {
+    const id = parseInt(req.params.id, 10);
+    try {
+      const {
+        status,
+        index,
+        character,
+        ...error
+      } = await updateCharacter(req.session, req.body, id);
+
+      if (status >= 400) {
+        res.status(status)
+          .json(error);
+      }
+
+      if (!Array.isArray(req.session.character)) {
+        req.session.character = [];
+      }
+
+      req.session.character[index] = character;
+
+      res.status(status)
+        .json({
+          message: 'Character updated!',
+          id: character.id
+        });
+    } catch (err) {
+      Logger.error(err);
+      res.status(500).json({
         message: 'Error!'
       });
     }
