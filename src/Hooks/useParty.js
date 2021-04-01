@@ -2,8 +2,9 @@ import { useState, useEffect } from 'react';
 
 import Fetcher from '../Helpers/Fetcher';
 
-const useParty = () => {
+const useParty = (gameId) => {
   const [party, setParty] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [incrementor, setIncrementor] = useState(false);
 
   const updateParty = () => {
@@ -11,8 +12,16 @@ const useParty = () => {
   };
 
   useEffect(() => {
+    if (!gameId && !loading) {
+      setParty([]);
+      return;
+    }
+
+    setLoading(true);
+
     Fetcher.getParty()
       .then(({ party: retrievedParty }) => {
+        setLoading(false);
         setParty(retrievedParty);
       });
   }, [incrementor]);

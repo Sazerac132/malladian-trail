@@ -96,13 +96,16 @@ class Fetcher {
   }
 
   /**
-   * Posts a new character to the API.
-   * @param {Character} payload The new character to save.
+   * Posts a new or existing character to the API.
+   * @param {Character} payload The character to save.
+   * @param {number} id The id of the existing character to save if applicable.
    */
-  static saveChar(payload) {
-    const endpoint = '/api/characters/create';
+  static saveChar(payload, id) {
+    let endpoint = '/api/characters';
+    if (id) endpoint += `/${id}`;
+
     const options = {
-      method: 'POST',
+      method: (id) ? 'PUT' : 'POST',
       headers: {
         'Content-Type': 'application/json'
       },

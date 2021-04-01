@@ -23,7 +23,7 @@ const GameContextProvider = ({ children }) => {
   const [gamePw, setGamePw] = useState(null);
   const [isGm, setIsGm] = useState(false);
   const [incrementor, setIncrementor] = useState(false);
-  const { party, updateParty } = useParty();
+  const { party, updateParty } = useParty(gameId);
 
   const {
     socket,
@@ -49,6 +49,12 @@ const GameContextProvider = ({ children }) => {
 
   const character1 = useCharacter();
   const character2 = useCharacter();
+
+  let numCharacters = 0;
+  if (character1.id) numCharacters++;
+  if (character2.id) numCharacters++;
+
+  const [numPlayers, setNumPlayers] = useState(numCharacters);
 
   const forceGameUpdate = () => {
     setIncrementor((b) => !b);
@@ -77,19 +83,28 @@ const GameContextProvider = ({ children }) => {
         game: {
           id: retrievedId = null,
           name: retrievedName = '',
-          isGm: retrievedIsGm = false,
-          characters: retrievedCharacters = []
+          isGm: retrievedIsGm = false
         },
-        character
+        character: retrievedCharacters
       }) => {
         setGameId(retrievedId);
         setGameName(retrievedName);
         setIsGm(retrievedIsGm);
         setLoading(false);
 
-        if (retrievedCharacters[0]) character1.importChar(retrievedCharacters[0]);
-        if (retrievedCharacters[1]) character2.importChar(retrievedCharacters[1]);
+        let numPlayersAfterLoad = 0;
 
+        if (retrievedCharacters[0]) {
+          character1.importChar(retrievedCharacters[0]);
+          numPlayersAfterLoad++;
+        }
+
+        if (retrievedCharacters[1]) {
+          character2.importChar(retrievedCharacters[1]);
+          numPlayersAfterLoad++;
+        }
+
+        setNumPlayers(numPlayersAfterLoad);
         updateParty();
 
         if (retrievedId) initiateWebSocket();
@@ -112,6 +127,9 @@ const GameContextProvider = ({ children }) => {
     isGm,
     character1,
     character2,
+    numCharacters,
+    numPlayers,
+    setNumPlayers,
     party
   };
 

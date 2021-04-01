@@ -1,0 +1,22 @@
+.map {
+  &__select {
+    display: flex;
+
+    &--option {
+      flex: 1;
+      text-align: center;
+    }
+
+    button {
+      width: 200px;
+    }
+  }
+
+  &__view {
+    padding: 8px;
+
+    img {
+      max-width: calc(100% - 16px);
+    }
+  }
+}

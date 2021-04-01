@@ -5,6 +5,11 @@
   src: url(./fonts/Goudy-Alt.ttf);
 }
 
+@font-face {
+  font-family: "MKBroken";
+  src: url(./fonts/MKBrokenTypes.ttf);
+}
+
 html {
   height: 100%;
 }
@@ -37,6 +42,16 @@ button {
   font-family: Goudy;
   color: rgba(255, 255, 255, 0.7);
   cursor: pointer;
+
+  &.highlight {
+    background: linear-gradient(to top, #947a62 0%, #7b5c3d 22%, #6c4824 30%, #6c4824 100%);
+  }
+}
+
+input,
+textarea {
+  background: rgba(255, 255, 255, 0.2);
+  font-family: Goudy; 
 }
 
 .userForm {

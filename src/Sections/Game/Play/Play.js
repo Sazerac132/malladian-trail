@@ -6,7 +6,11 @@ import { GameContext } from '../../../Contexts/GameContext';
 
 import Greet from './Greet';
 import PlayNav from './PlayNav';
+import Act from './Act';
 import CharacterCreation from './Character/CharacterCreation';
+import Map from './Map';
+import Party from './Party';
+import Log from './Log';
 
 import './style.scss';
 
@@ -21,6 +25,9 @@ const Play = () => {
   let playSection;
   switch (section) {
     case 'char': playSection = <CharacterCreation />; break;
+    case 'party': playSection = <Party />; break;
+    case 'map': playSection = <Map />; break;
+    case 'log': playSection = <Log />; break;
     default: throw new Error(`Invalid section: '${section}'.`);
   }
 
@@ -28,6 +35,7 @@ const Play = () => {
     <section className='play'>
       <div className='play__content'>
         {playSection}
+        <Act />
       </div>
       <div className='play__info'>
         <Greet />

@@ -7,10 +7,17 @@
   min-height: calc(85vh - 75px);
 
   &__content {
-
+    padding: 8px;
   }
 
   &__nav {
+    padding: 8px;
 
+    &--menuItem {
+      font-family: "MKBroken";
+      width: 100%;
+      font-size: 1.8rem;
+      line-height: 3rem;
+    }
   }
 }
