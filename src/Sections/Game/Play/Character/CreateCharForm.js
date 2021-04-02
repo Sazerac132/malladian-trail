@@ -6,8 +6,6 @@ import { GameContext } from '../../../../Contexts/GameContext';
 import './style.scss';
 
 const CreateCharForm = ({ character, index, editing, cancel, done }) => {
-  const { dispatch } = useContext(GameContext);
-
   const {
     updateForm,
     form: {
@@ -60,9 +58,6 @@ const CreateCharForm = ({ character, index, editing, cancel, done }) => {
 
     character.save(index)
       .then(() => {
-        dispatch({
-          message: 'CHARACTER_CREATED'
-        });
         setError('');
         done();
       });

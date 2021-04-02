@@ -2,10 +2,10 @@ import React, { createContext, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 import Fetcher from '../Helpers/Fetcher';
-import Logger from '../Helpers/Logger';
 
 import useCharacter from '../Hooks/useCharacter';
 import useParty from '../Hooks/useParty';
+import useInventory from '../Hooks/useInventory';
 import useWebSocket from '../Hooks/useWebSocket';
 
 const initialStore = {
@@ -24,12 +24,18 @@ const GameContextProvider = ({ children }) => {
   const [isGm, setIsGm] = useState(false);
   const [incrementor, setIncrementor] = useState(false);
   const { party, updateParty } = useParty(gameId);
+  const {
+    inventory,
+    updateInventory,
+    updateGoldLocal,
+    updateTimeLocal,
+    gmUpdateInventory
+  } = useInventory(gameId);
 
   const {
     socket,
     initiateWebSocket,
-    closeWebSocket,
-    dispatch
+    closeWebSocket
   } = useWebSocket();
 
   if (socket) {
@@ -42,6 +48,9 @@ const GameContextProvider = ({ children }) => {
       switch (instruction) {
         case 'chat': break;
         case 'update party': updateParty(); break;
+        case 'update inventory': updateInventory(); break;
+        case 'update gold': updateGoldLocal(message); break;
+        case 'update time': updateTimeLocal(message); break;
         default: break;
       }
     };
@@ -106,6 +115,7 @@ const GameContextProvider = ({ children }) => {
 
         setNumPlayers(numPlayersAfterLoad);
         updateParty();
+        updateInventory();
 
         if (retrievedId) initiateWebSocket();
       });
@@ -123,14 +133,15 @@ const GameContextProvider = ({ children }) => {
     createGame,
     joinGame,
     leaveGame,
-    dispatch,
     isGm,
     character1,
     character2,
     numCharacters,
     numPlayers,
     setNumPlayers,
-    party
+    party,
+    inventory,
+    gmUpdateInventory
   };
 
   return (

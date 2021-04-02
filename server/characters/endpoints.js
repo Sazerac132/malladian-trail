@@ -1,3 +1,5 @@
+const ws = require('../webSocket');
+
 const Logger = require('../Helpers/logger');
 
 const isInGame = require('../currentUserSession/isInGame');
@@ -34,6 +36,10 @@ const setUpEndpoints = (router) => {
           message: 'Character created!',
           id: character.id
         });
+
+      ws.sendMessageToGame(req.session.game.id, {
+        instruction: 'update party'
+      });
     } catch (err) {
       Logger.error(err);
       res.status(500).json({
@@ -68,6 +74,10 @@ const setUpEndpoints = (router) => {
           message: 'Character updated!',
           id: character.id
         });
+
+      ws.sendMessageToGame(req.session.game.id, {
+        instruction: 'update party'
+      });
     } catch (err) {
       Logger.error(err);
       res.status(500).json({
