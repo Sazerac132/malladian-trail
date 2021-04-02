@@ -1,8 +1,12 @@
 import React, { useContext } from 'react';
+import PropTypes from 'prop-types';
 
 import { GameContext } from '../../../Contexts/GameContext';
 
 import './style.scss';
+
+import coins from '../../../images/icons/coins.png';
+import hourglass from '../../../images/icons/hourglass.png';
 
 const Greet = () => {
   const {
@@ -10,7 +14,7 @@ const Greet = () => {
     character2,
     numCharacters,
     inventory: {
-      currency
+      currency, time
     }
   } = useContext(GameContext);
 
@@ -27,9 +31,28 @@ const Greet = () => {
   return (
     <div className='greet'>
       {message}
-      {(currency) && <div>{currency} gold</div>}
+      <div className='greet__resources'>
+        <Resource icon={coins} quantity={currency} />
+        <Resource icon={hourglass} quantity={time} />
+      </div>
     </div>
   );
+};
+
+function Resource({ icon, quantity }) {
+  return (
+    <div className='greet__resource'>
+      <div className='greet__resource--icon'>
+        <img src={icon} alt='Resource icon.' />
+      </div>
+      <div className='greet__resource--number'>{quantity}</div>
+    </div>
+  );
+}
+
+Resource.propTypes = {
+  icon: PropTypes.string,
+  quantity: PropTypes.number
 };
 
 export default Greet;

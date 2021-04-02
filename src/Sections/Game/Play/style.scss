@@ -21,3 +21,32 @@
     }
   }
 }
+
+.greet {
+  $size: 40px;
+
+  &__resources {
+    display: flex;
+  }
+
+  &__resource {
+    flex: 1;
+    display: flex;
+
+    &--icon {
+      flex: 3;
+      text-align: right;
+      position: relative;
+
+      img {
+        height: $size;
+        width: $size;
+      }
+    }
+
+    &--number {
+      flex: 2;
+      text-align: left;
+    }
+  }
+}
