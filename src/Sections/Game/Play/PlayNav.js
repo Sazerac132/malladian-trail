@@ -7,7 +7,8 @@ import './style.scss';
 
 const PlayNav = () => {
   const {
-    numCharacters
+    numCharacters,
+    isGm
   } = useContext(GameContext);
 
   const {
@@ -45,8 +46,17 @@ const PlayNav = () => {
         className={`play__nav--menuItem ${section === 'log' ? 'highlight' : ''}`}
         onClick={() => navigate('log')}
       >
-        Log
+        Journal
       </button>
+      {isGm && (
+        <button
+          type='button'
+          className={`play__nav--menuItem ${section === 'log' ? 'highlight' : ''}`}
+          onClick={() => navigate('master')}
+        >
+          Master
+        </button>
+      )}
     </div>
   );
 };

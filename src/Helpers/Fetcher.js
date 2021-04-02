@@ -120,6 +120,45 @@ class Fetcher {
           ...res.json()
         }))));
   }
+
+  /**
+   * Fetches the current inventory for party.
+   * @returns {Promise<Object>}
+   */
+  static getInventory() {
+    const endpoint = '/api/inventory';
+
+    const options = {
+      method: 'GET'
+    };
+
+    return fetch(endpoint, options)
+      .then((res) => ((res.ok)
+        ? res.json()
+        : Promise.reject(res.status)));
+  }
+
+  /**
+   * Sends a request to the server to update the number of an item in inventory.
+   * @param {Object} payload Contains the item and the new quantity.
+   * @returns {Promise<Object>}
+   */
+  static sendInventoryUpdateRequest(payload) {
+    const endpoint = '/api/inventory';
+
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(payload)
+    };
+
+    return fetch(endpoint, options)
+      .then((res) => ((res.ok)
+        ? res.json()
+        : Promise.reject(res.status)));
+  }
 }
 
 export default Fetcher;

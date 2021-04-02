@@ -11,6 +11,7 @@ import CharacterCreation from './Character/CharacterCreation';
 import Map from './Map';
 import Party from './Party';
 import Log from './Log';
+import Master from './Master';
 
 import './style.scss';
 
@@ -28,6 +29,7 @@ const Play = () => {
     case 'party': playSection = <Party />; break;
     case 'map': playSection = <Map />; break;
     case 'log': playSection = <Log />; break;
+    case 'master': playSection = <Master />; break;
     default: throw new Error(`Invalid section: '${section}'.`);
   }
 
@@ -41,7 +43,6 @@ const Play = () => {
         <Greet />
         <PlayNav />
       </div>
-
     </section>
   );
 };

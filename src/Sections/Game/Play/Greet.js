@@ -8,7 +8,10 @@ const Greet = () => {
   const {
     character1,
     character2,
-    numCharacters
+    numCharacters,
+    inventory: {
+      currency
+    }
   } = useContext(GameContext);
 
   let message;
@@ -24,6 +27,7 @@ const Greet = () => {
   return (
     <div className='greet'>
       {message}
+      {(currency) && <div>{currency} gold</div>}
     </div>
   );
 };

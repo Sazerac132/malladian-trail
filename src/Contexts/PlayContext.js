@@ -9,7 +9,8 @@ const PLAY_SECTIONS = [
   'char',
   'map',
   'party',
-  'log'
+  'log',
+  'master'
 ];
 
 export const PlayContext = createContext(initialStore);
