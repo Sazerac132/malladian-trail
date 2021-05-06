@@ -1,6 +1,11 @@
+@import '../../../../variables';
+
 .map {
+  height: 100%;
+
   &__select {
     display: flex;
+    height: $button-height;
 
     &--option {
       flex: 1;
@@ -13,10 +18,13 @@
   }
 
   &__view {
+    height: calc(100% - #{$gap + $button-height});
     padding: 8px;
+    text-align: center;
 
     img {
-      max-width: calc(100% - 16px);
+      max-width: calc(100% - #{$gap * 2});
+      max-height: 100%;
     }
   }
 }

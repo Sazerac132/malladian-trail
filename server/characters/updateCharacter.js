@@ -1,9 +1,7 @@
 const db = require('../database');
 const Validate = require('../Helpers/validator');
 
-const updateCharacter = async (session, payload, id) => {
-  const gameCode = session.game.id;
-
+const updateCharacter = async (gameCode, payload, id) => {
   const {
     name = '',
     desc = '',

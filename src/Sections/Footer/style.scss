@@ -1,5 +1,14 @@
+@import '../../variables';
+
 .footer {
-  text-align: center;
+  text-align: left;
   height: 50px;
-  border: 1px solid black;
+  width: 100%;
+  font-size: 1rem;
+  padding: 16px $gap-small $gap-small $gap-small;
+
+  @media only screen and (min-width: $break-mobile) {
+    position: absolute;
+    bottom: 0;
+  }
 }

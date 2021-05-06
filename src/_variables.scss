@@ -1,10 +1,25 @@
 /* Media Breakpoints */
 
 $break-mobile: 600px;
-$break-large: 1200px;
+$break-large: 1000px;
 
 /* Colours */
 
+$theme-colour: rgb(97, 67, 37);
 $font-colour: rgb(20, 14, 8);
 $link-colour: #130c06;
 $menu-hover-light: #cdc1ac;
+
+/* Page Layout */
+
+$gap: 8px;
+$gap-small: 4px;
+$header-height: 100px;
+$footer-height: 50px;
+$body-height: calc(100vh - #{$header-height + $footer-height + (2 * $gap)});
+$log-height-small: 100px;
+$content-height: calc(100% - #{$log-height-small + 20px});
+
+/* Element Sizes */
+
+$button-height: 34px;

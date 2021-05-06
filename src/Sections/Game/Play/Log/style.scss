@@ -1,0 +1,48 @@
+@import '../../../../variables';
+
+.log {
+  $form-height: 40px;
+  $background: rgba(0, 0, 0, 0.2);
+
+  background: rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.2);
+  height: $log-height-small;
+  width: calc(75% - #{$gap * 2});
+  bottom: $gap;
+  position: absolute;
+
+  &__content {
+    position: relative;
+    overflow: hidden;
+    height: calc(100% - #{$form-height});
+    padding-bottom: $gap;
+
+    &--inner {
+      position: absolute;
+      bottom: 0;
+    }
+  }
+
+  &--full {
+    height: calc(100% - #{$gap * 2});
+    background: default;
+  }
+
+  form {
+    $input-button-width: 70px;
+
+    padding-bottom: 4px;
+
+    > * {
+      display: inline-block;
+    }
+
+    input {
+      width: calc(100% - #{$input-button-width + 20px});
+    }
+
+    button {
+      width: $input-button-width;
+    }
+  }
+}

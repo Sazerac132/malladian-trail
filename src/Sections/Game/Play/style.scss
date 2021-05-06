@@ -1,24 +1,35 @@
+@import '../../../variables';
+
 .play {
-  background: rgba(0, 0, 0, 0.2);
-  padding: 8px;
-  display: grid;
-  grid-template-columns: 3fr 1fr;
-  box-shadow: inset 0 0 35px black;
   min-height: calc(85vh - 75px);
+  position: relative;
 
   &__content {
-    padding: 8px;
+    padding: $gap;
+    height: $content-height;
   }
 
   &__nav {
-    padding: 8px;
+    padding: $gap;
 
     &--menuItem {
-      font-family: "MKBroken";
+      display: block;
+      margin: 0 auto;
+      font-family: 'MKBroken';
       width: 100%;
+      max-width: 250px;
       font-size: 1.8rem;
       line-height: 3rem;
+
+      @media only screen and (min-width: $break-mobile) {
+        max-width: 100%;
+      }
     }
+  }
+
+  @media only screen and (min-width: $break-mobile) {
+    display: grid;
+    grid-template-columns: 1fr 3fr;
   }
 }
 

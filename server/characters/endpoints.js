@@ -11,13 +11,15 @@ const setUpEndpoints = (router) => {
   const PATH = 'characters';
 
   router.post(`/${PATH}`, isInGame, async (req, res) => {
+    const gameCode = req.session.game.id;
+
     try {
       const {
         status,
         index,
         character,
         ...error
-      } = await newCharacter(req.session, req.body);
+      } = await newCharacter(gameCode, req.body);
 
       if (status >= 400) {
         res.status(status)
@@ -37,7 +39,7 @@ const setUpEndpoints = (router) => {
           id: character.id
         });
 
-      ws.sendMessageToGame(req.session.game.id, {
+      ws.sendMessageToGame(gameCode, {
         instruction: 'update party'
       });
     } catch (err) {
@@ -49,14 +51,16 @@ const setUpEndpoints = (router) => {
   });
 
   router.put(`/${PATH}/:id`, isInGame, async (req, res) => {
+    const gameCode = req.session.game.id;
     const id = parseInt(req.params.id, 10);
+
     try {
       const {
         status,
         index,
         character,
         ...error
-      } = await updateCharacter(req.session, req.body, id);
+      } = await updateCharacter(gameCode, req.body, id);
 
       if (status >= 400) {
         res.status(status)
@@ -75,7 +79,7 @@ const setUpEndpoints = (router) => {
           id: character.id
         });
 
-      ws.sendMessageToGame(req.session.game.id, {
+      ws.sendMessageToGame(gameCode, {
         instruction: 'update party'
       });
     } catch (err) {

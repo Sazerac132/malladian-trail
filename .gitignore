@@ -1,8 +1,9 @@
 # Dependencies
 node_modules
 
-# System Files
+# System/IDE Files
 .DS_Store
+.idea
 
 # Dev Secrets
 .env

@@ -7,7 +7,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const outputDir = process.env.NODE_ENV === 'production' ? 'build' : 'dev';
 
 let webpackConfig = {
-  entry: './src/index.js',
+  entry: './src/index.tsx',
   output: {
     filename: 'app.js',
     path: path.resolve(__dirname, outputDir)
@@ -15,6 +15,11 @@ let webpackConfig = {
   devtool: 'inline-source-map',
   module: {
     rules: [
+      {
+        test: /\.tsx?$/,
+        use: 'ts-loader',
+        exclude: /node_modules/
+      },
       {
         test: /\.jsx?$/,
         exclude: /node_modules/,
@@ -47,24 +52,25 @@ let webpackConfig = {
       },
       {
         test: /\.(woff(2)?|ttf|eot|svg|otf)(\?v=\d+\.\d+\.\d+)?$/,
-        use: [{
-          loader: 'file-loader',
-          options: {
-            name: '[name].[ext]',
-            outputPath: 'fonts/'
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              name: '[name].[ext]',
+              outputPath: 'fonts/'
+            }
           }
-        }]
+        ]
       }
     ]
   },
   resolve: {
-    extensions: ['.js']
+    extensions: ['.js', '.ts', '.tsx', '.d.ts', '.jpg']
   },
   plugins: [
     new HtmlWebpackPlugin({
-      title: 'My Data Viewing Webpage',
       template: 'src/index.html',
-      inject: false
+      inject: true
     }),
     new MiniCssExtractPlugin({
       filename: 'app.css',
@@ -85,7 +91,13 @@ if (process.env.NODE_ENV === 'development') {
     watch: true,
     watchOptions: {
       aggregateTimeout: 600,
-      ignored: ['node_modules/**/*', 'webpack.config.js', 'babel.config.js', './index.js', 'server/**/*']
+      ignored: [
+        'node_modules/**/*',
+        'webpack.config.js',
+        'babel.config.js',
+        './index.ts',
+        'server/**/*'
+      ]
     }
   };
 }

@@ -1,10 +1,44 @@
+@import '../../variables';
+
 .wrapper {
+  padding: $gap;
   margin: 0 auto;
-  width: 90%;
+  width: 100%;
   max-width: 1200px;
+
+  @media only screen and (min-width: $break-mobile) {
+    position: relative;
+    width: 95%;
+    height: 100vh;
+  }
+
+  @media only screen and (min-width: $break-large) {
+    width: 90%;
+  }
 }
 
 .bodyWrapper {
-  min-height: calc(85vh - 50px);
-  overflow: hidden;
+  $dash-size: 3px;
+  $fill-colour: rgba(0, 0, 0, 0.2);
+  $border-colour: rgba($theme-colour, 0.5);
+
+  padding: $gap;
+
+  @media only screen and (min-width: $break-large) {
+    min-height: $body-height;
+    overflow: hidden;
+    box-shadow:
+      0 0 0 ($dash-size / 2) darken($border-colour, 20%),
+      0 $dash-size ($dash-size * 2) ($dash-size * 3) rgba(0, 0, 0, 0.5);
+  }
+
+  @media only screen and (min-width: $break-large) {
+    border: $dash-size dashed $border-colour;
+    box-shadow:
+      0 0 0 ($dash-size / 2) darken($border-colour, 20%),
+      inset 0 0 0 ($dash-size / 2) darken($border-colour, 20%),
+      0 $dash-size ($dash-size * 2) ($dash-size * 3) rgba(0, 0, 0, 0.5),
+      inset 0 0 0 ($dash-size * 1.2) #fff,
+      inset 0 0 100vw 100vw $fill-colour;
+  }
 }
