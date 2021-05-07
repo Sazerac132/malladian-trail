@@ -31,13 +31,14 @@ const setUpEndpoints = (router) => {
       const { index, action } = req.body;
 
       const gameCode = req.session.game.id;
-      const source = (req.session.game.isGm)
+      const source = req.session.game.isGm
         ? null
         : req.session.character[index].id;
 
       const newEventId = await addLogItem(gameCode, { action, source });
 
       res.status(201).json({
+        id: newEventId,
         message: 'Action saved.'
       });
 

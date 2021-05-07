@@ -1,5 +1,5 @@
-import React from 'react';
-
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   HashRouter as Router,
   Switch,
@@ -16,8 +16,24 @@ import About from '../About';
 import Rules from '../Rules';
 
 import './style.scss';
+import useWebSocket from '../../Hooks/useWebSocket';
+import { SystemStore } from '../../types';
+import { currentGameThunk } from '../../Store/GameSlice';
 
 const App: React.FC = () => {
+  const dispatch = useDispatch();
+  const isInGame = useSelector((store: SystemStore) => store.game.isInGame);
+  const { initiateWebSocket, closeWebSocket } = useWebSocket();
+
+  useEffect(() => {
+    if (isInGame) initiateWebSocket();
+    return () => closeWebSocket();
+  }, [isInGame]);
+
+  useEffect(() => {
+    dispatch(currentGameThunk());
+  });
+
   return (
     <div className="wrapper">
       <Router>

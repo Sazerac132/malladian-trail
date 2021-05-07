@@ -1,29 +1,34 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 
-import { GameContext } from '../../../Contexts/GameContext';
+import { useDispatch, useSelector } from 'react-redux';
+import { SystemStore } from '../../../types';
+import { leaveGameThunk } from '../../../Store/GameSlice';
 
 const Already: React.FC = () => {
-  const { gameId, gameName, leaveGame, isGm, gamePw } = useContext(GameContext);
+  const dispatch = useDispatch();
+  const { id, isGm, name, codeword } = useSelector(
+    (store: SystemStore) => store.game.data
+  );
 
   const triggerLeave = (ev: React.SyntheticEvent) => {
     ev.preventDefault();
-    leaveGame();
+    dispatch(leaveGameThunk());
   };
 
   return (
     <div className="already">
-      <h2>Currently playing {gameName}.</h2>
+      <h2>Currently playing {name}.</h2>
       {isGm && (
         <div>
           You are the GM. Pass this to other people so they can join.
           <ul>
             <li>
-              Game ID: <strong>{gameId}</strong>
+              Game ID: <strong>{id}</strong>
             </li>
-            {gamePw && (
+            {codeword && (
               <li>
-                Codeword: <strong>{gamePw}</strong>
+                Codeword: <strong>{codeword}</strong>
               </li>
             )}
           </ul>

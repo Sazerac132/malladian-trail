@@ -1,21 +1,21 @@
-import React, { useState, useContext } from 'react';
-
-import { GameContext } from '../../../../Contexts/GameContext';
-import { PlayContext } from '../../../../Contexts/PlayContext';
+import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
+import useLog from '../../../../Hooks/useLog';
+import { LogEntry, SystemStore } from '../../../../types';
 
 import './style.scss';
-import { Item, LogEntry } from '../../../../types';
 
 const Log = () => {
-  const { log, postLogItem, removeLogItem, isGm } = useContext(GameContext);
+  const isGm = useSelector((store: SystemStore) => store.game.data.isGm);
+  const { journal, addJournalItem, removeJournalItem } = useLog();
 
-  const { section } = useContext(PlayContext);
+  const section = useSelector((store: SystemStore) => store.navigation.section);
 
   const [newAction, setNewAction] = useState('');
 
   const onSubmit = (ev: React.SyntheticEvent) => {
     ev.preventDefault();
-    postLogItem({
+    addJournalItem({
       index: 0,
       action: newAction
     });
@@ -32,12 +32,12 @@ const Log = () => {
     <div className={parentClass}>
       <div className="log__content">
         <div className="log__content--inner">
-          {log.map((item, i) => (
+          {journal.map((item) => (
             <LogItem
               {...item}
               isGm={isGm}
-              key={i}
-              deleteCallback={removeLogItem}
+              key={item.id}
+              deleteCallback={removeJournalItem}
             />
           ))}
         </div>

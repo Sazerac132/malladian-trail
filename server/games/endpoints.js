@@ -91,7 +91,7 @@ const setUpEndpoints = (router) => {
   router.get('/current', (req, res) => {
     res.send({
       game: req.session.game || {},
-      character: req.session.character || {}
+      characters: req.session.character || []
     });
   });
 

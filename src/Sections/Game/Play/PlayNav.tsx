@@ -1,14 +1,22 @@
-import React, { useContext } from 'react';
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
-import { GameContext } from '../../../Contexts/GameContext';
-import { PlayContext } from '../../../Contexts/PlayContext';
+import { navigate as navigateRedux } from '../../../Store/NavigationSlice';
+import { Section, SystemStore } from '../../../types';
 
 import './style.scss';
 
 const PlayNav: React.FC = () => {
-  const { numCharacters, isGm } = useContext(GameContext);
+  const dispatch = useDispatch();
+  const isGm = useSelector((store: SystemStore) => store.game.data.isGm);
+  const section = useSelector((store: SystemStore) => store.navigation.section);
+  const numCharacters = useSelector(
+    (store: SystemStore) => store.characters.numCharacters
+  );
 
-  const { section, navigate } = useContext(PlayContext);
+  const navigate = (destination: Section) => {
+    dispatch(navigateRedux({ section: destination }));
+  };
 
   const charText = numCharacters === 2 ? 'Characters' : 'Character';
   return (

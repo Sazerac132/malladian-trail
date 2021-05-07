@@ -1,74 +1,65 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 
-import Fetcher, { LogUpdatePayload } from '../Helpers/Fetcher';
-import { Id, LogEntry, Party } from '../types';
+import { LogUpdatePayload } from '../Helpers/Fetcher';
+import { LogEntry, SystemStore } from '../types';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  addJournalItem as addJournalItemRedux,
+  addJournalItemThunk,
+  getJournalThunk,
+  removeJournalItem as removeJournalItemRedux,
+  removeJournalItemThunk,
+  setJournal
+} from '../Store/JournalSlice';
 
 interface UseLog {
-  log: LogEntry[];
+  journal: LogEntry[];
   loading: boolean;
-  addLogItem: (item: any, party: Party) => void;
-  removeLogItem: (id: number) => void;
-  removeLogItemLocal: (id: number) => void;
-  postLogItem: (payload: LogUpdatePayload) => void;
+  addJournalItemLocal: (item: LogEntry) => void;
+  addJournalItem: (payload: LogUpdatePayload) => void;
+  removeJournalItemLocal: (id: number) => void;
+  removeJournalItem: (id: number) => void;
 }
 
-const useLog = (gameId: Id): UseLog => {
-  const [log, setLog] = useState<LogEntry[]>([]);
-  const [loading, setLoading] = useState(false);
+const useLog = (): UseLog => {
+  const { data: journal, loading } = useSelector(
+    (store: SystemStore) => store.journal
+  );
+  const isInGame = useSelector((store: SystemStore) => store.game.isInGame);
+  const dispatch = useDispatch();
 
-  const addLogItem = (item: LogEntry, party: Party = []) => {
-    const char = item.charId
-      ? party.find(({ id }) => id === item.charId)?.name
-      : null;
-
-    setLog((oldLog) => {
-      return [...oldLog, { ...item, char: char || null } as LogEntry];
-    });
+  const addJournalItemLocal = (item: LogEntry) => {
+    dispatch(addJournalItemRedux(item));
   };
 
-  const postLogItem = (payload: LogUpdatePayload) => {
-    Fetcher.postLogItem(payload);
+  const addJournalItem = ({ index, action }: LogUpdatePayload) => {
+    dispatch(addJournalItemThunk(index, action));
   };
 
-  const removeLogItemLocal = (idToRemove: number) => {
-    console.log(idToRemove);
-    setLog((currentLog) => {
-      return currentLog.filter((li) => {
-        const { id } = li;
-
-        console.log(typeof idToRemove, typeof id);
-        return id !== idToRemove;
-      });
-    });
+  const removeJournalItemLocal = (id: number) => {
+    dispatch(removeJournalItemRedux({ id }));
   };
 
-  const removeLogItem = (id: number) => {
-    Fetcher.removeLogItem(id);
+  const removeJournalItem = (id: number) => {
+    dispatch(removeJournalItemThunk(id));
   };
 
   useEffect(() => {
-    if (!gameId && !loading) {
-      setLog([]);
+    if (!isInGame) {
+      dispatch(setJournal([]));
       return;
     }
 
-    const getLog = async () => {
-      setLoading(true);
-      const { log: retrievedLog } = await Fetcher.getLog();
-      setLoading(false);
-      setLog(retrievedLog);
-    };
-
-    getLog();
-  }, [gameId]);
+    dispatch(getJournalThunk());
+  }, [isInGame]);
 
   return {
-    log,
+    journal,
     loading,
-    addLogItem,
-    removeLogItem,
-    removeLogItemLocal,
-    postLogItem
+    addJournalItemLocal,
+    addJournalItem,
+    removeJournalItemLocal,
+    removeJournalItem
   };
 };
 

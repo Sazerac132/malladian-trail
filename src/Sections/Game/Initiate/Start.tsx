@@ -1,10 +1,12 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
-import { GameContext } from '../../../Contexts/GameContext';
 import Already from './Already';
 
 import './style.scss';
+import { useDispatch, useSelector } from 'react-redux';
+import { createGameThunk } from '../../../Store/GameSlice';
+import { SystemStore } from '../../../types';
 
 const confirmCreate = () => {
   /* eslint-disable-next-line no-alert, no-restricted-globals */
@@ -17,7 +19,8 @@ const Start = () => {
   const [gameName, setGameName] = useState<string>('');
   const [gamePw, setGamePw] = useState<string>('');
   const [error, setError] = useState<string>('');
-  const { gameId, createGame, saveGamePw } = useContext(GameContext);
+  const dispatch = useDispatch();
+  const isInGame = useSelector((store: SystemStore) => store.game.isInGame);
 
   const clearForm = () => {
     setGameName('');
@@ -25,7 +28,7 @@ const Start = () => {
     setError('');
   };
 
-  if (gameId) return <Already />;
+  if (isInGame) return <Already />;
 
   const onSubmit = (ev: React.SyntheticEvent) => {
     ev.preventDefault();
@@ -55,16 +58,12 @@ const Start = () => {
       return;
     }
 
-    createGame(gameName, gamePw)
-      .then(() => {
-        clearForm();
-        saveGamePw(gamePw);
+    dispatch(
+      createGameThunk({
+        name: gameName,
+        codeword: gamePw
       })
-      .catch((err) => {
-        if (err === 429)
-          setError('You can only create a game every 15 minutes.');
-        else throw new Error(err);
-      });
+    );
   };
 
   return (

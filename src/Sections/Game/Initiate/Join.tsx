@@ -1,16 +1,21 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
+import { useDispatch, useSelector } from 'react-redux';
 
-import { GameContext } from '../../../Contexts/GameContext';
 import Already from './Already';
 
 import './style.scss';
+import { joinGameThunk } from '../../../Store/GameSlice';
+import { SystemStore } from '../../../types';
 
 const Join: React.FC = () => {
   const [joinId, setJoinId] = useState<string>('');
   const [joinPw, setJoinPw] = useState<string>('');
   const [error, setError] = useState<string>('');
-  const { gameId, joinGame } = useContext(GameContext);
+  const isInGame = useSelector((store: SystemStore) => store.game.isInGame);
+
+  const dispatch = useDispatch();
 
   const clearForm = () => {
     setJoinId('');
@@ -18,7 +23,8 @@ const Join: React.FC = () => {
     setError('');
   };
 
-  if (gameId) return <Already />;
+  if (isInGame === null) return null;
+  if (isInGame) return <Already />;
 
   const onSubmit = (ev: React.SyntheticEvent) => {
     ev.preventDefault();
@@ -33,19 +39,21 @@ const Join: React.FC = () => {
       return;
     }
 
-    joinGame(joinId, joinPw)
-      .then(() => {
-        clearForm();
-      })
-      .catch((err: string) => {
-        if (err === '404')
-          setError('No game with that ID or password is wrong.');
-        else if (err === '429')
-          setError(
-            'You have tried to join too many games lately. Please wait before trying again.'
-          );
-        else throw new Error(err);
-      });
+    dispatch(joinGameThunk({ gameCode: joinId, codeword: joinPw }));
+
+    // joinGame(joinId, joinPw)
+    //   .then(() => {
+    //     clearForm();
+    //   })
+    //   .catch((err: string) => {
+    //     if (err === '404')
+    //       setError('No game with that ID or password is wrong.');
+    //     else if (err === '429')
+    //       setError(
+    //         'You have tried to join too many games lately. Please wait before trying again.'
+    //       );
+    //     else throw new Error(err);
+    //   });
   };
 
   return (
