@@ -1,11 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { Provider } from 'react-redux';
 
+import store from './Store';
 import App from './Sections/App';
-import Fetcher from './Helpers/Fetcher';
-
-(window as any).f = Fetcher;
 
 import './style.scss';
 
-ReactDOM.render(<App />, document.getElementById('app'));
+ReactDOM.render(
+  <Provider store={store}>
+    <App />
+  </Provider>,
+  document.getElementById('app')
+);

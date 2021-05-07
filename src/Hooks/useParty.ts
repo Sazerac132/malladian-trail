@@ -1,38 +1,32 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 
 import Fetcher from '../Helpers/Fetcher';
-import { Id, Party } from '../types';
+import { Party, SystemStore } from '../types';
+import { useDispatch, useSelector } from 'react-redux';
+import { getPartyThunk, setParty } from '../Store/PartySlice';
 
 interface UseParty {
-  party: Party;
   updateParty: () => void;
 }
 
-const useParty = (gameId: Id): UseParty => {
-  const [party, setParty] = useState<Party>([]);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [incrementor, setIncrementor] = useState<boolean>(false);
+const useParty = (): UseParty => {
+  const dispatch = useDispatch();
+  const isInGame = useSelector((store: SystemStore) => store.game.isInGame);
 
   const updateParty = () => {
-    setIncrementor((b) => !b);
+    dispatch(getPartyThunk());
   };
 
   useEffect(() => {
-    if (!gameId && !loading) {
-      setParty([]);
+    if (!isInGame) {
+      dispatch(setParty([]));
       return;
     }
 
-    setLoading(true);
-
-    Fetcher.getParty().then(({ party: retrievedParty }) => {
-      setLoading(false);
-      setParty(retrievedParty);
-    });
-  }, [incrementor]);
+    updateParty();
+  }, [isInGame]);
 
   return {
-    party,
     updateParty
   };
 };

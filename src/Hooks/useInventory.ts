@@ -1,61 +1,96 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
-import Fetcher from '../Helpers/Fetcher';
-import { Id, Inventory } from '../types';
+import {
+  getInventoryThunk,
+  resetInventory,
+  setCurrency as setCurrencyRedux,
+  setTime as setTimeRedux,
+  setItemQuantity as setItemQuantityRedux,
+  setCurrencyThunk,
+  setTimeThunk,
+  setItemThunk
+} from '../Store/InventorySlice';
+import { Inventory, SystemStore } from '../types';
 
 interface UseInventory {
   inventory: Inventory;
-  updateInventory: () => void;
-  updateGoldLocal: (currency: number) => void;
-  updateTimeLocal: (time: number) => void;
-  gmUpdateInventory: (item: string, quantity: number) => Promise<unknown>;
+  loading: boolean;
+  setCurrency: (currency: number) => void;
+  setCurrencyGm: (currency: number) => Promise<void>;
+  changeCurrencyGm: (currency: number) => Promise<void>;
+  setTime: (time: number) => void;
+  setTimeGm: (time: number) => Promise<void>;
+  changeTimeGm: (time: number) => Promise<void>;
+  setItem: (item: string, quantity: number) => void;
+  setItemGm: (item: string, quantity: number) => Promise<void>;
+  changeItemGm: (item: string, quantity: number) => Promise<void>;
 }
 
-const useInventory = (gameId: Id): UseInventory => {
-  const [inventory, setInventory] = useState<Inventory>({
-    time: 0,
-    currency: 0,
-    items: []
-  });
-  const [loading, setLoading] = useState(false);
-  const [incrementor, setIncrementor] = useState(false);
+const useInventory = (): UseInventory => {
+  const { data: inventory, loading } = useSelector(
+    (store: SystemStore) => store.inventory
+  );
+  const isInGame = useSelector((store: SystemStore) => store.game.isInGame);
+  const dispatch = useDispatch();
 
-  const updateInventory = () => {
-    setIncrementor((b) => !b);
+  const setCurrency = (qty: number) => {
+    dispatch(setCurrencyRedux({ quantity: qty }));
   };
 
-  const gmUpdateInventory = async (item: string, quantity: number) => {
-    return Fetcher.sendInventoryUpdateRequest({ item, quantity });
+  const setCurrencyGm = async (qty: number) => {
+    await dispatch(setCurrencyThunk(qty, 'set'));
   };
 
-  const updateGoldLocal = (currency: number) => {
-    setInventory((inv) => ({ ...inv, currency }));
+  const changeCurrencyGm = async (qty: number) => {
+    await dispatch(setCurrencyThunk(qty, 'change'));
   };
 
-  const updateTimeLocal = (time: number) => {
-    setInventory((inv) => ({ ...inv, time }));
+  const setTime = (qty: number) => {
+    dispatch(setTimeRedux({ quantity: qty }));
+  };
+
+  const setTimeGm = async (qty: number) => {
+    await dispatch(setTimeThunk(qty, 'set'));
+  };
+
+  const changeTimeGm = async (qty: number) => {
+    await dispatch(setTimeThunk(qty, 'change'));
+  };
+
+  const setItem = (item: string, qty: number) => {
+    dispatch(setItemQuantityRedux({ item, quantity: qty }));
+  };
+
+  const setItemGm = async (item: string, qty: number) => {
+    await dispatch(setItemThunk(item, qty, 'set'));
+  };
+
+  const changeItemGm = async (item: string, qty: number) => {
+    await dispatch(setItemThunk(item, qty, 'change'));
   };
 
   useEffect(() => {
-    if (!gameId && !loading) {
-      setInventory({ currency: 0, time: 0, items: [] });
+    if (!isInGame) {
+      dispatch(resetInventory());
       return;
     }
 
-    setLoading(true);
-
-    Fetcher.getInventory().then(({ inventory: retrievedInventory }) => {
-      setLoading(false);
-      setInventory(retrievedInventory);
-    });
-  }, [incrementor]);
+    dispatch(getInventoryThunk());
+  }, [isInGame]);
 
   return {
     inventory,
-    updateInventory,
-    updateGoldLocal,
-    updateTimeLocal,
-    gmUpdateInventory
+    loading,
+    setCurrency,
+    setCurrencyGm,
+    changeCurrencyGm,
+    setTime,
+    setTimeGm,
+    changeTimeGm,
+    setItem,
+    setItemGm,
+    changeItemGm
   };
 };
 

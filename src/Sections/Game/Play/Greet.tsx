@@ -1,28 +1,28 @@
-import React, { useContext } from 'react';
-
-import { GameContext } from '../../../Contexts/GameContext';
+import React from 'react';
 
 import './style.scss';
 
 import coins from '../../../images/icons/coins.png';
 import hourglass from '../../../images/icons/hourglass.png';
+import { useSelector } from 'react-redux';
+import { SystemStore } from '../../../types';
 
 const Greet: React.FC = () => {
+  const { currency, time } = useSelector(
+    (store: SystemStore) => store.inventory.data
+  );
   const {
-    character1,
-    character2,
-    numCharacters,
-    inventory: { currency, time }
-  } = useContext(GameContext);
+    characters: [character1, character2]
+  } = useSelector((store: SystemStore) => store.characters);
 
   let message;
 
-  if (numCharacters === 0) {
+  if (!character1 && !character2) {
     message = 'Welcome!';
-  } else if (numCharacters === 1) {
-    message = `Welcome, ${(character1 || character2).name}!`;
-  } else {
+  } else if (character1 && character2) {
     message = `Welcome, ${character1.name} and ${character2.name}!`;
+  } else {
+    message = `Welcome, ${(character1 || character2).name}!`;
   }
 
   return (

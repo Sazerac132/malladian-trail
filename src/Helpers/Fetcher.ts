@@ -1,5 +1,6 @@
 import {
   Character,
+  CharIndex,
   Game,
   Id,
   Inventory,
@@ -10,7 +11,7 @@ import {
 
 export interface GameMetadata {
   game: Game;
-  character: Character[];
+  characters: Character[];
 }
 
 export interface JoinGameResponse {
@@ -19,12 +20,8 @@ export interface JoinGameResponse {
 }
 
 export interface LogUpdatePayload {
-  index: 0;
+  index: CharIndex;
   action: string;
-}
-
-export interface OnlyMessage {
-  message: string;
 }
 
 class Fetcher {
@@ -35,8 +32,8 @@ class Fetcher {
    */
   static async createGame(
     name: string,
-    codeword: string
-  ): Promise<JoinGameResponse> {
+    codeword?: string
+  ): Promise<{ code: number }> {
     const endpoint = '/api/create';
     const options = {
       method: 'POST',
@@ -202,7 +199,7 @@ class Fetcher {
    */
   static async postLogItem(
     payload: LogUpdatePayload
-  ): Promise<{ message: string }> {
+  ): Promise<{ id: number; message: string }> {
     const endpoint = '/api/log';
 
     const options = {
