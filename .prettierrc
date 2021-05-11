@@ -2,5 +2,7 @@
   "trailingComma": "none",
   "tabWidth": 2,
   "semi": true,
-  "singleQuote": true
+  "singleQuote": true,
+  "importOrder": ["^\\.(.(?!(\\.scss$|types$)))+$", "/types", "./style.scss"],
+  "importOrderSeparation": true
 }

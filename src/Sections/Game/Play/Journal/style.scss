@@ -28,6 +28,20 @@
     background: default;
   }
 
+  &__charSelect {
+    display: flex;
+    height: $button-height;
+
+    &--option {
+      flex: 1;
+      text-align: center;
+    }
+
+    button {
+      width: 200px;
+    }
+  }
+
   form {
     $input-button-width: 70px;
 

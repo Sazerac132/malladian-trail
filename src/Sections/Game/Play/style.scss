@@ -7,6 +7,16 @@
   &__content {
     padding: $gap;
     height: $content-height;
+
+    @media only screen and (min-width: $break-mobile) {
+      flex: 3;
+    }
+  }
+
+  &__info {
+    @media only screen and (min-width: $break-mobile) {
+      flex: 1;
+    }
   }
 
   &__nav {
@@ -28,8 +38,8 @@
   }
 
   @media only screen and (min-width: $break-mobile) {
-    display: grid;
-    grid-template-columns: 1fr 3fr;
+    display: flex;
+    height: 100%;
   }
 }
 

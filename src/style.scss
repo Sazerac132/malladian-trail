@@ -76,17 +76,22 @@ button {
 input,
 textarea {
   background: rgba(255, 255, 255, 0.2);
-  font-family: Goudy; 
+  font-family: Goudy;
 }
 
 .userForm {
   label {
     display: grid;
     grid-template-columns: 1fr;
+    min-height: 30px;
   }
 
   input {
     margin-bottom: 8px;
+  }
+
+  a {
+    cursor: pointer;
   }
 
   @media only screen and (min-width: $break-mobile) {

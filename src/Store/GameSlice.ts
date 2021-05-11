@@ -1,4 +1,8 @@
-import { createSlice, current, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+
+import Fetcher from '../Helpers/Fetcher';
+import { resetCharacters, setCharacter } from './CharacterSlice';
+
 import {
   CharIndex,
   CreateGameCredentials,
@@ -8,8 +12,6 @@ import {
   JoinGameCredentials,
   Thunk
 } from '../types';
-import Fetcher from '../Helpers/Fetcher';
-import { setCharacter } from './CharacterSlice';
 
 const defaultState: GameStore = {
   data: {},
@@ -116,7 +118,7 @@ export const currentGameThunk = (): Thunk => async (dispatch) => {
   characters.slice(0, 2).forEach((character, index: CharIndex) => {
     dispatch(
       setCharacter({
-        ...character,
+        character,
         index
       })
     );
@@ -127,4 +129,5 @@ export const leaveGameThunk = (): Thunk => async (dispatch) => {
   dispatch(gameLoading({ loading: true }));
   await Fetcher.leaveGame();
   dispatch(leaveGame());
+  dispatch(resetCharacters());
 };

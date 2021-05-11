@@ -14,30 +14,26 @@ const setUpEndpoints = (router) => {
     const gameCode = req.session.game.id;
 
     try {
-      const {
-        status,
-        index,
-        character,
-        ...error
-      } = await newCharacter(gameCode, req.body);
+      const { status, index, character, ...error } = await newCharacter(
+        gameCode,
+        req.body
+      );
 
       if (status >= 400) {
-        res.status(status)
-          .json(error);
+        res.status(status).json(error);
         return;
       }
 
-      if (!Array.isArray(req.session.character)) {
-        req.session.character = [];
+      if (!Array.isArray(req.session.characters)) {
+        req.session.characters = [];
       }
 
-      req.session.character[index] = character;
+      req.session.characters[index] = character;
 
-      res.status(status)
-        .json({
-          message: 'Character created!',
-          id: character.id
-        });
+      res.status(status).json({
+        message: 'Character created!',
+        id: character.id
+      });
 
       ws.sendMessageToGame(gameCode, {
         instruction: 'update party'
@@ -55,29 +51,26 @@ const setUpEndpoints = (router) => {
     const id = parseInt(req.params.id, 10);
 
     try {
-      const {
-        status,
-        index,
-        character,
-        ...error
-      } = await updateCharacter(gameCode, req.body, id);
+      const { status, index, character, ...error } = await updateCharacter(
+        gameCode,
+        req.body,
+        id
+      );
 
       if (status >= 400) {
-        res.status(status)
-          .json(error);
+        res.status(status).json(error);
       }
 
-      if (!Array.isArray(req.session.character)) {
-        req.session.character = [];
+      if (!Array.isArray(req.session.characters)) {
+        req.session.characters = [];
       }
 
-      req.session.character[index] = character;
+      req.session.characters[index] = character;
 
-      res.status(status)
-        .json({
-          message: 'Character updated!',
-          id: character.id
-        });
+      res.status(status).json({
+        message: 'Character updated!',
+        id: character.id
+      });
 
       ws.sendMessageToGame(gameCode, {
         instruction: 'update party'

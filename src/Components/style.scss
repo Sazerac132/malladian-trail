@@ -1,0 +1,40 @@
+$width: 303px / 3;
+$height: 404px / 3;
+
+$small-divide: 1.2;
+
+.portrait {
+  width: $width;
+  height: $height;
+  background-image: url(../images/characters.jpg);
+  background-size: 600% 300%;
+  border-radius: 4px;
+
+  &--small {
+    width: $width / $small-divide;
+    height: $height / $small-divide;
+  }
+
+  &--none {
+    background-image: none;
+  }
+
+  &--noPlaceholder {
+    display: none;
+  }
+}
+
+@for $i from 0 through 2 {
+  @for $j from 0 through 5 {
+    $k: ($i * 6) + $j;
+    .portrait-#{$k} {
+      background-position-y: ($height * $i);
+      background-position-x: -1 * ($width * $j);
+
+      &.portrait--small {
+        background-position-y: ($height * $i / $small-divide);
+        background-position-x: -1 * ($width * $j / $small-divide);
+      }
+    }
+  }
+}

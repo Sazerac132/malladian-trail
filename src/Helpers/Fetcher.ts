@@ -20,7 +20,7 @@ export interface JoinGameResponse {
 }
 
 export interface LogUpdatePayload {
-  index: CharIndex;
+  charId: Id;
   action: string;
 }
 
@@ -122,9 +122,14 @@ class Fetcher {
   /**
    * Posts a new or existing character to the API.
    * @param {Character} payload The character to save.
+   * @param {CharIndex} index Local index of char to update.
    * @param {number} [id] The id of the existing character to save if applicable.
    */
-  static async saveChar(payload: Character & { index?: 0 | 1 }, id: Id) {
+  static async saveChar(
+    payload: Character,
+    index: CharIndex,
+    id?: Id
+  ): Promise<{ message: string; id: number }> {
     let endpoint = '/api/characters';
     if (id) endpoint += `/${id}`;
 
@@ -133,7 +138,7 @@ class Fetcher {
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(payload)
+      body: JSON.stringify({ ...payload, index })
     };
 
     const res = await fetch(endpoint, options);

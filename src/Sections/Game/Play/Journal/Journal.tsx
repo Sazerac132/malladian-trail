@@ -1,38 +1,41 @@
+import clsx from 'clsx';
 import React, { useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
+
 import useLog from '../../../../Hooks/useLog';
-import { LogEntry, SystemStore } from '../../../../types';
+import JournalCharSelector from './JournalCharSelector';
+
+import { CharIndex, LogEntry, SystemStore } from '../../../../types';
 
 import './style.scss';
 
-const Log = () => {
+const Journal = () => {
   const isGm = useSelector((store: SystemStore) => store.game.data.isGm);
+  const section = useSelector((store: SystemStore) => store.navigation.section);
+  const characters = useSelector(
+    (store: SystemStore) => store.characters.characters
+  );
+  const [activeChar, setActiveChar] = useState<CharIndex>(0);
   const { journal, addJournalItem, removeJournalItem } = useLog();
 
-  const section = useSelector((store: SystemStore) => store.navigation.section);
+  const { register, handleSubmit } = useForm();
 
-  const [newAction, setNewAction] = useState('');
-
-  const onSubmit = (ev: React.SyntheticEvent) => {
-    ev.preventDefault();
+  const onSubmit = handleSubmit(({ action }) => {
     addJournalItem({
-      index: 0,
-      action: newAction
+      charId: characters[activeChar].id,
+      action
     });
-  };
+  });
 
-  const onNewActionInputChange = (ev: React.SyntheticEvent) => {
-    setNewAction((ev.target as HTMLInputElement).value);
-  };
-
-  let parentClass = 'log';
-  if (section === 'log') parentClass += ' log--full';
+  const parentClass = clsx('log', section === 'log' && 'log--full');
+  const journalShow = section === 'log' ? journal : journal.slice(-2);
 
   return (
     <div className={parentClass}>
       <div className="log__content">
         <div className="log__content--inner">
-          {journal.map((item) => (
+          {journalShow.map((item) => (
             <LogItem
               {...item}
               isGm={isGm}
@@ -43,15 +46,15 @@ const Log = () => {
         </div>
       </div>
       <form onSubmit={onSubmit} id="newEventForm">
-        <input
-          type="text"
-          value={newAction}
-          onChange={onNewActionInputChange}
-        />
+        <input type="text" {...register('action')} />
         <button type="submit" form="newEventForm">
           Add
         </button>
       </form>
+      <JournalCharSelector
+        activeJournalChar={activeChar}
+        setActiveJournalChar={setActiveChar}
+      />
     </div>
   );
 };
@@ -72,4 +75,4 @@ function LogItem(props: LogItemProps): React.ReactElement {
   );
 }
 
-export default Log;
+export default Journal;

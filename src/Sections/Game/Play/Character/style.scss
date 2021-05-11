@@ -5,37 +5,73 @@
   overflow-y: scroll;
 }
 
-.howMany {
-  &__switch {
-    button {
-      width: 70px;
-      padding: 4px;
-      margin: 8px;
-    }
-  }
-}
-
 .createChar {
   width: 90%;
   margin: 0 auto;
+}
 
-  button {
-    
+.selectCharacter {
+  display: flex;
+  justify-content: space-evenly;
+  padding: 0.3rem 2rem 0.3rem 2rem;
+
+  > * {
+    flex: 1;
   }
 }
 
 .myCharacter {
-  overflow: hidden;
-  border: 1px solid black;
+  $line-color: 1px solid rgba($font-colour, 0.3);
 
-  img {
+  overflow: hidden;
+  border: $line-color;
+  border-radius: 8px;
+  padding: 8px;
+
+  h2,
+  h4 {
+    padding: 0;
+    margin: 0;
+  }
+
+  .portrait {
     float: left;
     margin: 8px;
   }
 
   &--inverted {
-    img {
+    .portrait {
       float: right;
+    }
+  }
+
+  &--section {
+    font-size: 1.1rem;
+
+    h4 {
+      font-size: 1.15rem;
+      padding-left: 4px;
+      margin-top: 12px;
+      border-bottom: $line-color;
+    }
+  }
+}
+
+.charIconSelect {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+
+  &__portrait {
+    padding: 3px;
+    text-align: center;
+    cursor: pointer;
+
+    & > *:first-child {
+      margin: 0 auto;
+    }
+
+    &:hover > *:first-child {
+      filter: brightness(110%);
     }
   }
 }

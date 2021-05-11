@@ -4,7 +4,6 @@ export type Id = number | null;
 export type Name = string | null;
 export type Codeword = string | null;
 export type CharIndex = 0 | 1;
-export type NumCharacters = 0 | 1 | 2;
 
 export type Game = {
   id: Id;
@@ -18,27 +17,27 @@ export type MapSection = 'world' | 'current';
 
 export type Character = {
   id?: Id;
+  icon: number | null;
   name: Name;
   desc: string;
   pet: PET;
   petName: string;
-  traits: string;
-  other: string;
-  active?: boolean;
+  traits?: string;
+  other?: string;
+  retired?: boolean;
 };
 
+export type Characters = [Character?, Character?];
+
 export enum PET {
-  'Bear' = 'Bear',
-  'Falcon' = 'Falcon',
-  'Nightingale' = 'Nightingale',
-  'Wolf' = 'Wolf',
-  'Raven' = 'Raven'
+  'Bear' = 0,
+  'Falcon' = 1,
+  'Nightingale' = 2,
+  'Wolf' = 3,
+  'Raven' = 4
 }
 
-export type Party = Pick<
-  Character,
-  'id' | 'name' | 'desc' | 'pet' | 'petName'
->[];
+export type Party = Character[];
 
 export type Item = {
   item: string;
@@ -87,8 +86,9 @@ export interface SystemStore {
 }
 
 export interface CharacterStore {
-  characters: [Character?, Character?];
-  numCharacters: NumCharacters;
+  characters: Characters;
+  error: Error | null;
+  loading: [boolean, boolean];
 }
 
 export interface GameStore {
@@ -118,6 +118,7 @@ export interface InventoryStore {
 
 export interface PartyStore {
   lineup: Party;
+  inactive: Party;
   loading: boolean;
   error: Error | null;
 }

@@ -1,8 +1,7 @@
 import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { LogUpdatePayload } from '../Helpers/Fetcher';
-import { LogEntry, SystemStore } from '../types';
-import { useDispatch, useSelector } from 'react-redux';
 import {
   addJournalItem as addJournalItemRedux,
   addJournalItemThunk,
@@ -11,6 +10,8 @@ import {
   removeJournalItemThunk,
   setJournal
 } from '../Store/JournalSlice';
+
+import { LogEntry, SystemStore } from '../types';
 
 interface UseLog {
   journal: LogEntry[];
@@ -32,8 +33,8 @@ const useLog = (): UseLog => {
     dispatch(addJournalItemRedux(item));
   };
 
-  const addJournalItem = ({ index, action }: LogUpdatePayload) => {
-    dispatch(addJournalItemThunk(index, action));
+  const addJournalItem = ({ charId, action }: LogUpdatePayload) => {
+    dispatch(addJournalItemThunk(charId, action));
   };
 
   const removeJournalItemLocal = (id: number) => {

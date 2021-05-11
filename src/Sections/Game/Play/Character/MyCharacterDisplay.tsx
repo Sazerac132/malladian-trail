@@ -1,29 +1,30 @@
-import React from 'react';
-import { Character, CharIndex } from '../../../../types';
+import clsx from 'clsx';
+import React, { useContext } from 'react';
 
-interface CharDisplayProps {
-  character: Character;
-  index: CharIndex;
-  update: () => unknown;
-}
+import CharacterIcon from '../../../../Components/CharacterIcon';
+import { ManageCharContext } from '../../../../Contexts/ManageCharContext';
+import TextFormatter from '../../../../Helpers/TextFormatter';
 
-const MyCharacterDisplay: React.FC<CharDisplayProps> = ({
-  character,
-  index,
-  update
-}: CharDisplayProps) => {
-  const { name, desc, pet, petName, traits, other } = character;
+const MyCharacterDisplay: React.FC = () => {
+  const {
+    character: { icon, name, desc, pet, petName, traits, other },
+    index,
+    setMode
+  } = useContext(ManageCharContext);
 
-  let wrapperClass = 'myCharacter';
-  if (index > 0) wrapperClass += ' myCharacter--inverted';
+  const wrapperClass = clsx(
+    'myCharacter',
+    index > 0 && 'myCharacter--inverted'
+  );
 
   return (
     <div className={wrapperClass}>
-      <img src="https://loremflickr.com/150/150" alt="portrait" />
-      <strong>Name:</strong>
-      &nbsp;{name}
+      <CharacterIcon index={icon} noPlaceholder />
+      <h2>{name}</h2>
       <div>{desc}</div>
-      <button type="button" onClick={update}>
+      {traits && <CharSection title="Traits" text={traits} />}
+      {other && <CharSection title="Other Details" text={other} />}
+      <button type="button" onClick={() => setMode('edit')}>
         Update
       </button>
     </div>
@@ -31,3 +32,18 @@ const MyCharacterDisplay: React.FC<CharDisplayProps> = ({
 };
 
 export default MyCharacterDisplay;
+
+interface CharSectionProps {
+  title: string;
+  text: string;
+}
+
+function CharSection(props: CharSectionProps): React.ReactElement {
+  const { title, text } = props;
+  return (
+    <div className="myCharacter--section">
+      <h4>{title}</h4>
+      <div>{TextFormatter.formatText(text)}</div>
+    </div>
+  );
+}

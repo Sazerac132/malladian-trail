@@ -2,6 +2,7 @@ const throttle = require('express-throttle');
 
 const db = require('../database');
 const Logger = require('../Helpers/logger');
+const setCharActive = require('../characters/setCharActive');
 
 const setUpEndpoints = (router) => {
   router.post(
@@ -91,16 +92,32 @@ const setUpEndpoints = (router) => {
   router.get('/current', (req, res) => {
     res.send({
       game: req.session.game || {},
-      characters: req.session.character || []
+      characters: req.session.characters || []
     });
   });
 
-  router.post('/leave', (req, res) => {
-    req.session.game = null;
+  router.post('/leave', async (req, res) => {
+    try {
+      const charIdsToDeactivate = req.session.characters.map(({ id }) => id);
+      const { status } = await setCharActive(
+        req.session.game.id,
+        false,
+        charIdsToDeactivate
+      );
 
-    res.send({
-      message: 'Successfully left game.'
-    });
+      req.session.game = {};
+      req.session.characters = [];
+
+      res.status(status).send({
+        message: 'Successfully left game.'
+      });
+    } catch (err) {
+      req.session.game = {};
+      req.session.characters = [];
+      res.status(500).send({
+        message: 'Error occurred while trying to leave game!'
+      });
+    }
   });
 
   router.get('/becomeGm', (req, res) => {

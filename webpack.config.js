@@ -38,8 +38,7 @@ let webpackConfig = {
             }
           },
           'css-loader',
-          'sass-loader',
-          'postcss-loader'
+          'sass-loader'
         ]
       },
       {

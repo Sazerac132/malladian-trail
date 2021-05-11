@@ -17,6 +17,7 @@ CREATE TABLE tgame (
 CREATE TABLE tcharacter (
   id INT NOT NULL AUTO_INCREMENT,
   game_id INT NOT NULL,
+  icon INT,
   char_name VARCHAR(20) NOT NULL,
   char_desc VARCHAR(1000) NOT NULL,
   traits VARCHAR(200),
@@ -33,12 +34,14 @@ CREATE OR REPLACE VIEW vo_party AS (
     ga.game_name,
     ga.game_code,
     ch.id AS 'char_id',
+    ch.icon,
     ch.char_name,
     ch.char_desc,
     ch.traits,
     ch.other,
     ch.pet,
-    ch.pet_name
+    ch.pet_name,
+    ch.active
   FROM tgame ga
   INNER JOIN tcharacter ch
   ON ch.game_id = ga.id
@@ -53,13 +56,12 @@ RETURNS INT
 READS SQL DATA
 
 BEGIN
-
 	SET @game_code = (SELECT FLOOR(RAND() * 900000 + 100000));
 
 	WHILE EXISTS (SELECT game_code FROM tgame WHERE game_code = @game_code) DO
 		SET @game_code = (SELECT FLOOR(RAND() * 900000 + 100000));
 	END WHILE;
-	
+
 	INSERT INTO tgame (game_code, game_name, codeword) VALUES (@game_code, n, cw);
 	RETURN @game_code;
 

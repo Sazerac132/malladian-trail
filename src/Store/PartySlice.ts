@@ -1,9 +1,12 @@
-import { Party, PartyStore, Thunk } from '../types';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+
 import Fetcher from '../Helpers/Fetcher';
+
+import { Party, PartyStore, Thunk } from '../types';
 
 const defaultState: PartyStore = {
   lineup: [],
+  inactive: [],
   loading: false,
   error: null
 };
@@ -19,7 +22,16 @@ const partySlice = createSlice({
       state.loading = action.payload.loading;
     },
     setParty: (state: PartyStore, action: PayloadAction<Party>): void => {
-      state.lineup = action.payload;
+      const active: Party = [];
+      const retired: Party = [];
+
+      action.payload.forEach((c) => {
+        if (c.retired) retired.push(c);
+        else active.push(c);
+      });
+
+      state.lineup = active;
+      state.inactive = retired;
       state.loading = false;
       state.error = null;
     },

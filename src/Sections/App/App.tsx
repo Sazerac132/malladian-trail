@@ -32,7 +32,7 @@ const App: React.FC = () => {
 
   useEffect(() => {
     dispatch(currentGameThunk());
-  });
+  }, []);
 
   return (
     <div className="wrapper">

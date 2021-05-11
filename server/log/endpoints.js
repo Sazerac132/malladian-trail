@@ -28,12 +28,10 @@ const setUpEndpoints = (router) => {
 
   router.post(`/${PATH}`, isInGame, async (req, res) => {
     try {
-      const { index, action } = req.body;
+      const { charId, action } = req.body;
 
       const gameCode = req.session.game.id;
-      const source = req.session.game.isGm
-        ? null
-        : req.session.character[index].id;
+      const source = req.session.game.isGm ? null : charId;
 
       const newEventId = await addLogItem(gameCode, { action, source });
 

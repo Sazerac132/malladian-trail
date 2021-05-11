@@ -1,25 +1,21 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+
+import { changeMap } from '../../../../Store/NavigationSlice';
+import worldMap from '../../../../images/Malladrus.jpg';
+
+import { MapSection, SystemStore } from '../../../../types';
 
 import './style.scss';
 
-import worldMap from '../../../../images/Malladrus.jpg';
-import { MapSection } from '../../../../types';
-
 const Map = () => {
-  const [mapType, setMapType] = useState('world');
+  const dispatch = useDispatch();
+  const mapSection = useSelector(
+    (store: SystemStore) => store.navigation.mapSection
+  );
 
-  const navigate = (to: MapSection) => {
-    if (to === mapType) return;
-    switch (to) {
-      case 'world':
-        setMapType('world');
-        break;
-      case 'current':
-        setMapType('current');
-        break;
-      default:
-        throw new Error(`Invalid map type: ${to}`);
-    }
+  const navigate = (mapSection: MapSection) => {
+    dispatch(changeMap({ mapSection }));
   };
 
   return (
@@ -28,7 +24,7 @@ const Map = () => {
         <div className="map__select--option">
           <button
             type="button"
-            className={mapType === 'world' ? 'highlight' : ''}
+            className={mapSection === 'world' ? 'highlight' : ''}
             onClick={() => navigate('world')}
           >
             World
@@ -37,7 +33,7 @@ const Map = () => {
         <div className="map__select--option">
           <button
             type="button"
-            className={mapType === 'current' ? 'highlight' : ''}
+            className={mapSection === 'current' ? 'highlight' : ''}
             onClick={() => navigate('current')}
           >
             Current

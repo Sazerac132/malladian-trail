@@ -1,6 +1,8 @@
-import { CharIndex, JournalStore, LogEntry, Thunk } from '../types';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+
 import Fetcher from '../Helpers/Fetcher';
+
+import { Id, JournalStore, LogEntry, Thunk } from '../types';
 
 const defaultState: JournalStore = {
   data: [],
@@ -75,13 +77,13 @@ export const getJournalThunk = (): Thunk => async (dispatch) => {
 };
 
 export const addJournalItemThunk = (
-  index: CharIndex,
+  charId: Id,
   action: string
 ): Thunk => async (dispatch, getStore) => {
   dispatch(journalLoading);
-  const char = getStore().characters.characters[index];
+  const char = getStore().party.lineup.find(({ id }) => id === charId);
   try {
-    const { id } = await Fetcher.postLogItem({ index, action });
+    const { id } = await Fetcher.postLogItem({ charId: char.id, action });
     dispatch(
       addJournalItem({
         id,

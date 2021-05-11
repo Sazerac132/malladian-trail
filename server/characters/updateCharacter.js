@@ -9,7 +9,8 @@ const updateCharacter = async (gameCode, payload, id) => {
     petName = '',
     traits = '',
     other = '',
-    index = 0
+    index = 0,
+    icon = null
   } = payload;
 
   const invalid = Validate.Character(payload);
@@ -23,18 +24,32 @@ const updateCharacter = async (gameCode, payload, id) => {
   }
 
   const subQuery = '(SELECT id FROM tgame WHERE game_code = :gameCode)';
-  const sql = 'UPDATE tcharacter SET '
-    + 'char_name = :name, '
-    + 'char_desc = :desc, '
-    + 'pet = :pet, '
-    + 'pet_name = :petName, '
-    + 'traits = :traits, '
-    + 'other = :other, '
-    + 'active = TRUE '
-    + 'WHERE id = :id '
-    + `AND game_id = (${subQuery})`;
+  const sql =
+    'UPDATE tcharacter SET ' +
+    'icon = :icon, ' +
+    'char_name = :name, ' +
+    'char_desc = :desc, ' +
+    'pet = :pet, ' +
+    'pet_name = :petName, ' +
+    'traits = :traits, ' +
+    'other = :other, ' +
+    'active = TRUE ' +
+    'WHERE id = :id ' +
+    `AND game_id = (${subQuery})`;
 
-  const params = { gameCode, id, name, desc, pet, petName, traits, other };
+  const params = {
+    gameCode,
+    id,
+    icon,
+    name,
+    desc,
+    pet,
+    petName,
+    traits,
+    other
+  };
+
+  console.log(sql, params);
 
   await db.query(sql, params);
 

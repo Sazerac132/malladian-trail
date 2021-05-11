@@ -25,7 +25,7 @@
   padding: $gap;
 
   @media only screen and (min-width: $break-large) {
-    min-height: $body-height;
+    height: $body-height;
     overflow: hidden;
     box-shadow:
       0 0 0 ($dash-size / 2) darken($border-colour, 20%),

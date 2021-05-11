@@ -1,14 +1,15 @@
 import React from 'react';
-import { Redirect } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import { Redirect } from 'react-router-dom';
 
-import Greet from './Greet';
-import PlayNav from './PlayNav';
 import CharacterCreation from './Character/CharacterCreation';
+import Greet from './Greet';
+import Journal from './Journal';
 import Map from './Map';
-import Party from './Party';
-import Log from './Log';
 import Master from './Master';
+import Party from './Party';
+import PlayNav from './PlayNav';
+
 import { SystemStore } from '../../../types';
 
 import './style.scss';
@@ -50,7 +51,7 @@ const Play: React.FC = () => {
       </div>
       <div className="play__content">
         {playSection}
-        <Log />
+        <Journal />
       </div>
     </section>
   );
